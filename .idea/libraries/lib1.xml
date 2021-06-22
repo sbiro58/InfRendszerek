@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="lib1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/management/target/doctor-management/WEB-INF/lib/protobuf-java-3.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/management/target/doctor-management/WEB-INF/lib/jsf-impl-2.1.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/management/target/doctor-management/WEB-INF/lib/primefaces-7.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/management/target/doctor-management/WEB-INF/lib/mysql-connector-java-8.0.20.jar!/" />
+      <root url="jar://$PROJECT_DIR$/management/target/doctor-management/WEB-INF/lib/jsf-api-2.1.7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
