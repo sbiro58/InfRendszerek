@@ -1,0 +1,93 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE html
+   PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+   <title>Orvosi törzsadat nyilvántartó</title>
+   <script type="text/javascript">
+      PrimeFaces.locales['de'] = {
+         closeText: 'Schließen',
+         prevText: 'Zurück',
+         nextText: 'Weiter',
+         monthNames: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+         monthNamesShort: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+         dayNames: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+         dayNamesShort: ['Son', 'Mon', 'Die', 'Mit', 'Don', 'Fre', 'Sam'],
+         dayNamesMin: ['S', 'M', 'D', 'M ', 'D', 'F ', 'S'],
+         weekHeader: 'Woche',
+         firstDay: 1,
+         isRTL: false,
+         showMonthAfterYear: false,
+         yearSuffix: '',
+         timeOnlyTitle: 'Nur Zeit',
+         timeText: 'Zeit',
+         hourText: 'Stunde',
+         minuteText: 'Minute',
+         secondText: 'Sekunde',
+         currentText: 'Aktuelles Datum',
+         ampm: false,
+         month: 'Monat',
+         week: 'Woche',
+         day: 'Tag',
+         allDayText: 'Ganzer Tag'
+      };
+   </script>
+
+   <style type="text/css">
+      .value {
+         font-weight: bold;
+      }
+   </style>
+</h:head>
+
+<h:body>
+   <h3>Nyilvántartás</h3>
+
+   <ui:include src="/menu.xhtml" />
+
+   <h:form id="new-patient">
+      <p:panelGrid columns="2">
+         <f:facet name="header">
+            Új Páciens adatai:
+         </f:facet>
+         <h:outputLabel for="new_p_inscurancecode" value="Taj szám:" />
+         <p:inputMask id="new_p_inscurancecode" value="#{patients.newpatient.socialInsuranceCode}"
+            label="new_p_inscurancecode" mask="999 999 999" />
+         <h:outputLabel for="new_p_name" value="Név:" />
+         <p:inputText id="new_p_name" value="#{patients.newpatient.name}" label="new_p_name" />
+         <h:outputLabel for="new_p_birthdate" value="Születési dátum:" />
+         <p:calendar id="new_p_birthdate" value="#{patients.newpatient.birthDate}" pattern="yyyy-MM-dd" mask="true" />
+         <h:outputLabel for="new_p_gender" value="Neme:" />
+         <p:selectOneButton value="#{patients.newpatient.gender}">
+            <f:selectItem itemLabel="Férfi" itemValue="M" />
+            <f:selectItem itemLabel="Nő" itemValue="F" />
+         </p:selectOneButton>
+      </p:panelGrid>
+      <p:commandButton value="Beteg felvétele" id="ajax_new_patient" update="new-patient,:exist-patients"
+         action="#{patients.addnewpatient}" style="margin-right:20px;" styleClass="ui-priority-primary" />
+   </h:form>
+
+   <h3>Nyilvántartásban szereplők:</h3>
+   <p:accordionPanel id="exist-patients" value="#{patients.existpatients}" var="existPateint">
+      <p:tab title="#{existPateint.name} - #{existPateint.socialInsuranceCode}">
+         <h:panelGrid columns="2" cellpadding="5">
+            <h:outputText value="Név:" style="font-weight: bold" />
+            <h:outputText value="#{existPateint.name}" />
+
+            <h:outputText value="Születési dátum:" style="font-weight: bold" />
+            <h:outputText value="#{existPateint.birthDate}" />
+
+            <h:outputText value="Taj szám:" style="font-weight: bold" />
+            <h:outputText value="#{existPateint.socialInsuranceCode}" />
+
+            <h:outputText value="Neme:" style="font-weight: bold" />
+            <h:outputText value="#{existPateint.getGender().equalsIgnoreCase('M') ? 'Férfi' : 'Nő'}" />
+         </h:panelGrid>
+      </p:tab>
+   </p:accordionPanel>
+
+</h:body>
+
+</html>
