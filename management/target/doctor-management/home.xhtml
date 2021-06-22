@@ -1,0 +1,95 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE html
+   PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+   <title>Orvosi törzsadat nyilvántartó</title>
+</h:head>
+
+<h:body>
+   <h2>Vizit</h2>
+
+   <ui:include src="/menu.xhtml" />
+
+   <h:form id="patient">
+      <p:panelGrid columns="2">
+         <f:facet name="header">
+            Páciens keresése
+         </f:facet>
+         <h:outputLabel for="socialinsurancecode" value="Taj szám:" />
+         <p:inputText id="socialinsurancecode" value="#{examine.tajCode}" label="socialinsurancecode" />
+      </p:panelGrid>
+      <p:commandButton value="Beteg keresése" id="ajax" update="patient,result-found,result-not-found,:new-examine"
+         action="#{examine.search}" style="margin-right:20px;" styleClass="ui-priority-primary" />
+
+      <p:panelGrid id="result-found" columns="2" rendered="#{examine.patient != null}">
+         <f:facet name="header">
+            Páciens:
+         </f:facet>
+         <h:outputLabel for="p_inscurancecode" value="Taj szám:" />
+         <h:outputText id="p_inscurancecode" value="#{examine.patient.socialInsuranceCode}" label="p_inscurancecode" />
+         <h:outputLabel for="p_name" value="Név:" />
+         <h:outputText id="p_name" value="#{examine.patient.name}" label="p_name" />
+         <h:outputLabel for="p_birthdate" value="Születési dátum:" />
+         <h:outputText id="p_birthdate" value="#{examine.patient.birthDate}" label="p_birthdate" />
+         <h:outputLabel for="p_gender" value="Neme:" />
+         <h:outputText id="p_gender" value="#{examine.patient.getGender().equalsIgnoreCase('M') ? 'Férfi' : 'Nő'}"
+            label="p_gender" />
+      </p:panelGrid>
+
+      <p:accordionPanel id="result-found-examines" value="#{examine.patientExamines}" var="pExamine">
+         <p:tab title="Vizit ideje - #{pExamine.examineDate}">
+            <h:panelGrid columns="2" cellpadding="5">
+               <h:outputText value="Diagnózis:" style="font-weight: bold" />
+               <h:outputText value="#{pExamine.diagnose}" />
+
+               <h:outputText value="Felírt kezelés:" style="font-weight: bold" />
+               <h:outputText value="#{pExamine.treatments}" />
+
+               <h:outputText value="Felírt gyógyszerek:" style="font-weight: bold" />
+               <h:outputText value="#{pExamine.medicines}" />
+            </h:panelGrid>
+         </p:tab>
+      </p:accordionPanel>
+
+      <h:form id="result-not-found" rendered="#{examine.patient == null}">
+         <h:outputText value="#{examine.tajCode}" />
+         <h3>Kérem keressen pácienst!</h3>
+      </h:form>
+   </h:form>
+
+   <h:panelGroup id="new-examine">
+      <h:form id="new-examine-form" rendered="#{examine.newinsurancecode != null}">
+         <p:panelGrid columns="2">
+            <f:facet name="header">
+               Új vizit felvitele:
+            </f:facet>
+            <h:outputLabel for="newdiagnose" value="Diagnózis:" />
+            <p:inputTextarea id="newdiagnose" name="newdiagnose" rows="5" cols="30" counter="display_diag"
+               maxlength="500" counterTemplate="{0} karakter van még." autoResize="false"
+               value="#{examine.newdiagnose}" />
+            <br />
+            <h:outputText id="display_diag" />
+            <h:outputLabel for="newmedicines" value="Gyógyszer(ek):" />
+            <p:inputTextarea id="newmedicines" name="newmedicines" rows="5" cols="30" counter="display_med"
+               maxlength="1000" counterTemplate="{0} karakter van még." autoResize="false"
+               value="#{examine.newmedicines}" />
+            <br />
+            <h:outputText id="display_med" />
+            <h:outputLabel for="newtreatments" value="Kezelés(ek):" />
+            <p:inputTextarea id="newtreatments" name="newtreatments" rows="5" cols="30" counter="display_treat"
+               maxlength="1000" counterTemplate="{0} karakter van még." autoResize="false"
+               value="#{examine.newtreatments}" />
+            <br />
+            <h:outputText id="display_treat" />
+         </p:panelGrid>
+         <h:inputHidden id="newexamineinsurancecode" value="#{examine.newinsurancecode}" />
+         <p:commandButton value="Új vizit rögzítése" id="ajax2" update=":patient:result-found-examines,new-examine"
+            action="#{examine.addnewexamine}" style="margin-right:20px;" styleClass="ui-priority-primary" />
+      </h:form>
+   </h:panelGroup>
+</h:body>
+
+</html>

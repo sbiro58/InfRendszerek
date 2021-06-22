@@ -1,0 +1,73 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE html
+   PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+   <title>Orvosi törzsadat nyilvántartó</title>
+   <style type="text/css">
+      .value {
+         font-weight: bold;
+      }
+   </style>
+</h:head>
+
+<h:body>
+   <h2>Szűrővizsgálatok</h2>
+
+   <ui:include src="/menu.xhtml" />
+
+   <h:form id="new-test">
+      <p:messages id="messages" showDetail="true" closable="true">
+         <p:autoUpdate />
+      </p:messages>
+      <p:panelGrid columns="2">
+         <f:facet name="header">
+            Új szűrővizsgálat feltételei:
+         </f:facet>
+         <h:outputLabel for="new_t_name" value="Szűrés megnevezése:" />
+         <p:selectOneMenu id="new_t_name" name="new_t_name" value="#{newtest.name}" effect="fold" editable="true">
+            <f:selectItems value="#{screeningtest.existtests}" />
+         </p:selectOneMenu>
+         <h:outputLabel for="new_t_period" value="Gyakoriság:" />
+         <p:inputNumber id="new_t_period" value="#{newtest.period}" symbol=" évente" symbolPosition="s"
+            decimalPlaces="0">
+         </p:inputNumber>
+         <h:outputLabel for="new_t_min" value="Hány éves kortól:" />
+         <p:inputNumber id="new_t_min" value="#{newtest.min}" decimalPlaces="0"></p:inputNumber>
+         <h:outputLabel for="new_t_max" value="Hány éves korig:" />
+         <p:inputNumber id="new_t_max" value="#{newtest.max}" decimalPlaces="0"></p:inputNumber>
+         <h:outputLabel for="new_t_gender" value="Kikre vonatkozik:" />
+         <p:selectOneButton value="#{newtest.gender}">
+            <f:selectItem itemLabel="Férfi" itemValue="M" />
+            <f:selectItem itemLabel="Nő" itemValue="F" />
+            <f:selectItem itemLabel="Mindenki" itemValue="A" />
+         </p:selectOneButton>
+      </p:panelGrid>
+      <p:commandButton value="Emberek keresése" id="ajax_new_test" update="new-test,:exist-patients"
+         action="#{screeningtest.search}" style="margin-right:20px;" styleClass="ui-priority-primary" />
+   </h:form>
+
+   <h3>Szűrővizsgálattal kapcsolatos betegek:</h3>
+   <p:accordionPanel id="exist-patients" value="#{screeningtest.existpatients}" var="existPateint">
+      <p:tab title="#{existPateint.name} - #{existPateint.socialInsuranceCode}">
+         <h:panelGrid columns="2" cellpadding="5">
+            <h:outputText value="Név:" style="font-weight: bold" />
+            <h:outputText value="#{existPateint.name}" />
+
+            <h:outputText value="Születési dátum:" style="font-weight: bold" />
+            <h:outputText value="#{existPateint.birthDate}" />
+
+            <h:outputText value="Taj szám:" style="font-weight: bold" />
+            <h:outputText value="#{existPateint.socialInsuranceCode}" />
+
+            <h:outputText value="Neme:" style="font-weight: bold" />
+            <h:outputText value="#{existPateint.getGender().equalsIgnoreCase('M') ? 'Férfi' : 'Nő'}" />
+         </h:panelGrid>
+      </p:tab>
+   </p:accordionPanel>
+
+</h:body>
+
+</html>
